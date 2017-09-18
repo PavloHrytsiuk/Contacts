@@ -2,11 +2,8 @@ package com.example.pasha.contacts;
 
 import java.util.List;
 
-/**
- * Created by Pasha on 29.11.2016.
- */
 
-public interface ContactDAO
+public interface ContactDAO  //test interface, not use now
 {
     // Добавление контакта - возвращает ID добавленного контакта
     public void addContact(Contact contact);

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ContactSimpleDAO implements ContactDAO
+public class ContactSimpleDAO implements ContactDAO   //test class, don't use
 {
 
     private final List<Contact> contacts = new ArrayList<Contact>();
