@@ -39,9 +39,7 @@ public class ContactsActivity extends AppCompatActivity {
     DBHelper dbHelper;
     SQLiteDatabase database;
     boolean dbChange = false;
-
     EditText searchEdText;
-
     String text;
 
     @Override
@@ -50,7 +48,7 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.contacts_main);
 
         dbHelper = new DBHelper(this);
-        // подключаемся к базе
+        // connection to the base
         database = dbHelper.getWritableDatabase();
 
         //database.delete("contacts", null, null);

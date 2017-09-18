@@ -1,8 +1,5 @@
 package com.example.pasha.contacts;
 
-/**
- * Created by Pasha on 26.11.2016.
- */
 
 public class Contact implements Comparable<Contact> {
 

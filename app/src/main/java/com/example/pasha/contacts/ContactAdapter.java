@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Created by Pasha on 27.11.2016.
- */
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
     List<Contact> listContacts;
