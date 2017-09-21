@@ -8,21 +8,28 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 
 public class Database {
-    private DBHelper dbHelper;
     private SQLiteDatabase database;
     private Context context;
     private Cursor cursor = null;
+    private DBHelper dbHelper; //= new DBHelper(context);
 
-    public void connectionDatebase(Context context) {
+    Database(Context context) {
         this.context = context;
-
         dbHelper = new DBHelper(context);
+    }
+
+
+    public void firstConnectionToDatebase() {
+
         // connection to the base
-        database = dbHelper.getWritableDatabase();
+        try {
+            database = dbHelper.getWritableDatabase();
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
 
         //cursor = null;
         try {
@@ -40,19 +47,32 @@ public class Database {
             contentValues.put("other", "***");
             Log.d("TAG", "NEW id = " + database.insert("contacts", null, contentValues));
         }
+
+        cursor.close();
+        dbHelper.close();
     }
 
-    public List<Contact> getListFromDatabase() {
+    public ArrayList<Contact> getListFromDatabase() {
+
+        try {
+            database = dbHelper.getWritableDatabase();
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
+
+        try {
+            cursor = database.query("contacts", null, null, null, null, null, null);
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
 
         //read for SQL
-        List<Contact> list;
+        ArrayList<Contact> list;
         //listView = (ListView) findViewById(R.id.listView);
         list = new ArrayList<>();
 
         //contactsListChange = contactsList;  ///&^&&
-
-
-        cursor = database.query("contacts", null, null, null, null, null, null);
+        //cursor = database.query("contacts", null, null, null, null, null, null);
 
         //////read
         if (cursor.moveToFirst()) {
@@ -76,6 +96,53 @@ public class Database {
         dbHelper.close();
         //sortIdList();
         return list;
+    }
+
+    private void addContactToDatabase(Contact contact) {
+        //dbHelper = new DBHelper(this);
+        database = dbHelper.getWritableDatabase();
+
+        // database.delete("contacts", null, null);
+        ContentValues contentValues = new ContentValues();
+           /* if (contact.getContactId() != 0) {
+                contentValues.put("id", contact.getContactId());
+            }*/
+        contentValues.put("name", contact.getName());
+        contentValues.put("surname", contact.getSurname());
+        contentValues.put("phone", contact.getTel());
+        contentValues.put("other", contact.getOther());
+        Log.d("TAG", "NEW contact = " + database.insert("contacts", null, contentValues));
+
+        contentValues.clear();
+
+        dbHelper.close();
+    }
+
+    public void readDatabaseToLog() {
+        database = dbHelper.getWritableDatabase();
+        try {
+            cursor = database.query("contacts", null, null, null, null, null, null);
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
+
+        if (cursor.moveToFirst()) {
+            int idIndex = cursor.getColumnIndex("id");
+            int nameIndex = cursor.getColumnIndex("name");
+            int surnameIndex = cursor.getColumnIndex("surname");
+            int phoneIndex = cursor.getColumnIndex("phone");
+            int otherIndex = cursor.getColumnIndex("other");
+            do {
+                Log.d("TAG", "☺ ID = " + cursor.getInt(idIndex) +
+                        ", Name = " + cursor.getString(nameIndex) +
+                        ", Surname = " + cursor.getString(surnameIndex) +
+                        ", Phone = " + cursor.getString(phoneIndex) +
+                        ", Other = " + cursor.getString(otherIndex));
+               // list.add(new Contact(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getString(surnameIndex), cursor.getString(phoneIndex), cursor.getString(otherIndex)));
+            } while (cursor.moveToNext());
+        } else Log.d("TAG", "0 rows");
+        cursor.close();
+        dbHelper.close();
     }
 
 }

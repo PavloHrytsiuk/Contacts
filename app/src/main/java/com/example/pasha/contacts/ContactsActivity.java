@@ -41,13 +41,21 @@ public class ContactsActivity extends AppCompatActivity {
     boolean dbChange = false;
     EditText searchEdText;
     String text;
+    Database databaseClass = new Database(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contacts_main);
 
-        dbHelper = new DBHelper(this);
+        listView = (ListView) findViewById(R.id.listView);
+        contactsList = new ArrayList<Contact>();
+        contactsList = databaseClass.getListFromDatabase();
+        databaseClass.readDatabaseToLog();
+
+        sortIdList();
+
+       /* dbHelper = new DBHelper(this);
         // connection to the base
         database = dbHelper.getWritableDatabase();
 
@@ -71,8 +79,8 @@ public class ContactsActivity extends AppCompatActivity {
         }
 
         //read for SQL
-        listView = (ListView) findViewById(R.id.listView);
-        contactsList = new ArrayList<Contact>();
+
+
 
         //contactsListChange = contactsList;  ///&^&&
 
@@ -98,8 +106,8 @@ public class ContactsActivity extends AppCompatActivity {
         Collections.sort(contactsList);
         //***set id how position!!!
         cursor.close();
-        dbHelper.close();
-        sortIdList();
+        dbHelper.close();*/
+
 
 //        contactsList.add(new Contact("Palvo", "Hrytsiuk", "+380953275624"));
 //        contactsList.add(new Contact("Oleksandr", "Hrytsiuk", "+380953085331"));
