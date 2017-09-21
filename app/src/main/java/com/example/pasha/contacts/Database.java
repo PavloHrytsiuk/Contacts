@@ -22,13 +22,9 @@ public class Database {
 
     public ArrayList<Contact> getListFromDatabase() {
 
-        try {
-            database = dbHelper.getWritableDatabase();
-        } catch (Exception e) {
-            Log.d("Tag", e.toString());
-        }
 
         try {
+            database = dbHelper.getWritableDatabase();
             cursor = database.query("contacts", null, null, null, null, null, null);
         } catch (Exception e) {
             Log.d("Tag", e.toString());
@@ -82,9 +78,9 @@ public class Database {
 
         // database.delete("contacts", null, null);
         ContentValues contentValues = new ContentValues();
-            if (contact.getContactId() != 0) {
-                contentValues.put("id", contact.getContactId());
-            }
+       /* if (contact.getContactId() != 0) {
+            contentValues.put("id", contact.getContactId());
+        }*/
         contentValues.put("name", contact.getName());
         contentValues.put("surname", contact.getSurname());
         contentValues.put("phone", contact.getTel());
@@ -97,8 +93,8 @@ public class Database {
     }
 
     public void readDatabaseToLog() {
-        database = dbHelper.getWritableDatabase();
         try {
+            database = dbHelper.getWritableDatabase();
             cursor = database.query("contacts", null, null, null, null, null, null);
         } catch (Exception e) {
             Log.d("Tag", e.toString());
@@ -116,11 +112,22 @@ public class Database {
                         ", Surname = " + cursor.getString(surnameIndex) +
                         ", Phone = " + cursor.getString(phoneIndex) +
                         ", Other = " + cursor.getString(otherIndex));
-               // list.add(new Contact(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getString(surnameIndex), cursor.getString(phoneIndex), cursor.getString(otherIndex)));
+                // list.add(new Contact(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getString(surnameIndex), cursor.getString(phoneIndex), cursor.getString(otherIndex)));
             } while (cursor.moveToNext());
         } else Log.d("TAG", "0 rows");
         cursor.close();
         dbHelper.close();
+    }
+
+    public void deleteContactFromDatabase() {
+        try {
+            database = dbHelper.getWritableDatabase();
+            cursor = database.query("contacts", null, null, null, null, null, null);
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
+
+
     }
 
 }

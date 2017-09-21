@@ -82,7 +82,7 @@ public class ContactsActivity extends AppCompatActivity {
 //                }
                 intent.putExtra("size", contactsList.size());
                 //  intent.putExtra("position", contactPosition);
-                intent.putExtra("ID", contactAdapter.listContacts.get(position).getContactId());
+                intent.putExtra("ID", contactAdapter.listContacts.get(position).getPositionID());
                 startActivityForResult(intent, 1);
             }
         });
@@ -153,7 +153,7 @@ public class ContactsActivity extends AppCompatActivity {
             return;
         }
         int position = data.getIntExtra("position", -1); ///change later
-        int contactID = data.getIntExtra("ID", -1);
+        int positionID = data.getIntExtra("ID", -1);
 
         if (resultCode == SET_CONTACT) {
 
@@ -176,8 +176,8 @@ public class ContactsActivity extends AppCompatActivity {
         if (resultCode == RESULT_DELETE) {
 //            int position = data.getIntExtra("position", -1);
 
-            if (contactID != -1) {
-                contactsList.remove(contactID);
+            if (positionID != -1) {
+                contactsList.remove(positionID);
                 sortIdList();
                 if (searchText != null) {
                     contactAdapter.filter(searchText);
@@ -190,18 +190,18 @@ public class ContactsActivity extends AppCompatActivity {
         }
         if (resultCode == RESULT_EDIT_CONTACT) {
 //            int position = data.getIntExtra("position", -1); ///change later
-            Log.d("TAG", "(RESULT_EDIT_CONTACT)contactID " + contactID);
+            Log.d("TAG", "(RESULT_EDIT_CONTACT)positionID " + positionID);
 
-            if (contactID != -1) {
-                Contact newContact = new Contact(data.getIntExtra("ID", -1), data.getStringExtra("newName"), data.getStringExtra("newSurname"), data.getStringExtra("newPhone"), data.getStringExtra("newOther"));
+            if (positionID != -1) {
+                Contact newContact = new Contact( data.getStringExtra("newName"), data.getStringExtra("newSurname"), data.getStringExtra("newPhone"), data.getStringExtra("newOther"));
                 Log.d("TAG", "NewContact_Name" + newContact.getName());
                 Log.d("TAG", "NewContact_Surname" + newContact.getSurname());
                 Log.d("TAG", "NewContact_Tel" + newContact.getTel());
                 Log.d("TAG", "NewContact_Other" + newContact.getOther());
-                Log.d("TAG", "NewContact_ID" + String.valueOf(newContact.getContactId()));
+                Log.d("TAG", "NewContact_positionID" + String.valueOf(newContact.getPositionID()));
 
 
-                contactsList.set(contactID, newContact);
+                contactsList.set(positionID, newContact);
                 Collections.sort(contactsList);
                 sortIdList();
                 if (searchText != null) {
@@ -221,8 +221,8 @@ public class ContactsActivity extends AppCompatActivity {
         database.delete("contacts", null, null);
         ContentValues contentValues = new ContentValues();
         for (Contact contact : list) {
-            if (contact.getContactId() != 0) {
-                contentValues.put("id", contact.getContactId());
+            if (contact.getPositionID() != 0) {
+                contentValues.put("id", contact.getPositionID());
             }
             contentValues.put("name", contact.getName());
             contentValues.put("surname", contact.getSurname());
@@ -246,10 +246,10 @@ public class ContactsActivity extends AppCompatActivity {
 
     private void sortIdList() {
         for (int i = 0; i < contactsList.size(); i++) {
-            contactsList.get(i).setContactId(i);
+            contactsList.get(i).setPositionID(i);
         }
         for (int i = 0; i < contactsList.size(); i++) {
-            Log.d("TAG", "new ID =" + contactsList.get(i).getContactId() + " " + contactsList.get(i).getSurname() + " " + contactsList.get(i).getName());
+            Log.d("TAG", "new PositionID =" + contactsList.get(i).getPositionID() + " " + contactsList.get(i).getSurname() + " " + contactsList.get(i).getName());
         }
     }
 }

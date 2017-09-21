@@ -1,8 +1,13 @@
 package com.example.pasha.contacts;
 
 
+import android.support.annotation.NonNull;
+
 public class Contact implements Comparable<Contact> {
 
+
+
+    private int positionID;
     private int contactId;
     private String name;
     private String surname;
@@ -30,13 +35,13 @@ public class Contact implements Comparable<Contact> {
         this.other = other;
     }
 
-    public int getContactId() {
+    public int getContactID() {
         return contactId;
     }
 
-    public void setContactId(int contactId) {
+   /* public void setContactID(int contactId) {
         this.contactId = contactId;
-    }
+    }  //clean*/
 
     public String getOther() {
         return other;
@@ -70,8 +75,16 @@ public class Contact implements Comparable<Contact> {
         this.surname = surname;
     }
 
+    public int getPositionID() {
+        return positionID;
+    }
+
+    public void setPositionID(int positionID) {
+        this.positionID = positionID;
+    }
+
     @Override
-    public int compareTo(Contact o) {
+    public int compareTo(@NonNull Contact o) {
         if (surname.compareToIgnoreCase(o.surname)==0){
             return name.compareToIgnoreCase(o.name);
         }
