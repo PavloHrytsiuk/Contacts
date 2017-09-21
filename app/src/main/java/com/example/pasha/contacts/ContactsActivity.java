@@ -2,9 +2,7 @@ package com.example.pasha.contacts;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,10 +14,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -40,7 +36,7 @@ public class ContactsActivity extends AppCompatActivity {
     SQLiteDatabase database;
     boolean dbChange = false;
     EditText searchEdText;
-    String text;
+    private String searchText;
     Database databaseClass = new Database(this);
 
     @Override
@@ -49,12 +45,10 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.contacts_main);
 
         listView = (ListView) findViewById(R.id.listView);
-        contactsList = new ArrayList<>();
+        //contactsList = new ArrayList<>();
         contactsList = databaseClass.getListFromDatabase();
         databaseClass.readDatabaseToLog();
         sortIdList();
-
-
 
 
 //        contactsList.add(new Contact("Palvo", "Hrytsiuk", "+380953275624"));
@@ -108,8 +102,8 @@ public class ContactsActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                text = searchEdText.getText().toString().toLowerCase(Locale.getDefault());
-                contactAdapter.filter(text);
+                searchText = searchEdText.getText().toString().toLowerCase(Locale.getDefault());
+                contactAdapter.filter(searchText);
 //                contactsList.clear();
                 //contactsList = (ArrayList<Contact>) contactAdapter.listContacts;
 //                for (Contact cont : contactAdapter.listContacts) {
@@ -167,13 +161,15 @@ public class ContactsActivity extends AppCompatActivity {
             contactsList.add(newContact);
             Collections.sort(contactsList);
             sortIdList();
-            if (text != null) {
-                contactAdapter.filter(text);
+            if (searchText != null) {
+                contactAdapter.filter(searchText);
             }
             contactAdapter.notifyDataSetChanged();
             ///*******
             //reloadSqlDB(contactsList);
-            dbChange = true;
+            databaseClass.addContactToDatabase(newContact);
+            databaseClass.readDatabaseToLog();
+            //dbChange = true;
 
 
         }
@@ -183,8 +179,8 @@ public class ContactsActivity extends AppCompatActivity {
             if (contactID != -1) {
                 contactsList.remove(contactID);
                 sortIdList();
-                if (text != null) {
-                    contactAdapter.filter(text);
+                if (searchText != null) {
+                    contactAdapter.filter(searchText);
                 }
                 contactAdapter.notifyDataSetChanged();
                 //reloadSqlDB(contactsList);
@@ -208,8 +204,8 @@ public class ContactsActivity extends AppCompatActivity {
                 contactsList.set(contactID, newContact);
                 Collections.sort(contactsList);
                 sortIdList();
-                if (text != null) {
-                    contactAdapter.filter(text);
+                if (searchText != null) {
+                    contactAdapter.filter(searchText);
                 }
                 contactAdapter.notifyDataSetChanged();
                 //reloadSqlDB(contactsList);
@@ -253,7 +249,7 @@ public class ContactsActivity extends AppCompatActivity {
             contactsList.get(i).setContactId(i);
         }
         for (int i = 0; i < contactsList.size(); i++) {
-            Log.d("TAG", "new ID =" + contactsList.get(i).getContactId() + " " + contactsList.get(i).getSurname());
+            Log.d("TAG", "new ID =" + contactsList.get(i).getContactId() + " " + contactsList.get(i).getSurname() + " " + contactsList.get(i).getName());
         }
     }
 }

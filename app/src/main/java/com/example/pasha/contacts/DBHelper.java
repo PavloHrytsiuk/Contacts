@@ -18,8 +18,8 @@ public class DBHelper extends SQLiteOpenHelper {
         Log.d("TAG", "--- onCreate database ---");
         // create table with fields
         db.execSQL("create table contacts ("
-                + "id integer primary key autoincrement," + "name text,"
-                + "surname text," + "phone text," + "other text" + ");");
+                + "id integer primary key autoincrement," + "name searchText,"
+                + "surname searchText," + "phone searchText," + "other searchText" + ");");
     }
 
     @Override

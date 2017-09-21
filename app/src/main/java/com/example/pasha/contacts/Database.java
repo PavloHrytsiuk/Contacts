@@ -72,7 +72,7 @@ public class Database {
         return list;
     }
 
-    private void addContactToDatabase(Contact contact) {
+    public void addContactToDatabase(Contact contact) {
 
         try {
             database = dbHelper.getWritableDatabase();
@@ -82,9 +82,9 @@ public class Database {
 
         // database.delete("contacts", null, null);
         ContentValues contentValues = new ContentValues();
-           /* if (contact.getContactId() != 0) {
+            if (contact.getContactId() != 0) {
                 contentValues.put("id", contact.getContactId());
-            }*/
+            }
         contentValues.put("name", contact.getName());
         contentValues.put("surname", contact.getSurname());
         contentValues.put("phone", contact.getTel());
