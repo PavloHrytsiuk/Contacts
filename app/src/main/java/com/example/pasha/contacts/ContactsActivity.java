@@ -49,64 +49,12 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.contacts_main);
 
         listView = (ListView) findViewById(R.id.listView);
-        contactsList = new ArrayList<Contact>();
+        contactsList = new ArrayList<>();
         contactsList = databaseClass.getListFromDatabase();
         databaseClass.readDatabaseToLog();
-
         sortIdList();
 
-       /* dbHelper = new DBHelper(this);
-        // connection to the base
-        database = dbHelper.getWritableDatabase();
 
-        //database.delete("contacts", null, null);
-
-        Cursor cursor = null;
-        try {
-            cursor = database.query("contacts", null, null, null, null, null, null);
-        } catch (Exception e) {
-            Log.d("Tag", e.toString());
-        }
-        Log.d("TAG", "count " + String.valueOf(cursor.getCount()));
-        if (cursor.getCount() == 0) {
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("name", "Name");
-            contentValues.put("surname", "Surname");
-            contentValues.put("phone", "+38*********");
-            contentValues.put("other", "***");
-            Log.d("TAG", "NEW id = " + database.insert("contacts", null, contentValues));
-        }
-
-        //read for SQL
-
-
-
-        //contactsListChange = contactsList;  ///&^&&
-
-
-        cursor = database.query("contacts", null, null, null, null, null, null);
-
-        //////read
-        if (cursor.moveToFirst()) {
-            int idIndex = cursor.getColumnIndex("id");
-            int nameIndex = cursor.getColumnIndex("name");
-            int surnameIndex = cursor.getColumnIndex("surname");
-            int phoneIndex = cursor.getColumnIndex("phone");
-            int otherIndex = cursor.getColumnIndex("other");
-            do {
-                Log.d("TAG", "ID = " + cursor.getInt(idIndex) +
-                        ", Name = " + cursor.getString(nameIndex) +
-                        ", Surname = " + cursor.getString(surnameIndex) +
-                        ", Phone = " + cursor.getString(phoneIndex) +
-                        ", Other = " + cursor.getString(otherIndex));
-                contactsList.add(new Contact(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getString(surnameIndex), cursor.getString(phoneIndex), cursor.getString(otherIndex)));
-            } while (cursor.moveToNext());
-        } else Log.d("TAG", "0 rows");
-        Collections.sort(contactsList);
-        //***set id how position!!!
-        cursor.close();
-        dbHelper.close();*/
 
 
 //        contactsList.add(new Contact("Palvo", "Hrytsiuk", "+380953275624"));

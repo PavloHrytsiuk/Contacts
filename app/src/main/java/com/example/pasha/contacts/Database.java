@@ -12,45 +12,13 @@ import java.util.Collections;
 
 public class Database {
     private SQLiteDatabase database;
-    private Context context;
     private Cursor cursor = null;
     private DBHelper dbHelper; //= new DBHelper(context);
 
     Database(Context context) {
-        this.context = context;
         dbHelper = new DBHelper(context);
     }
 
-
-    public void firstConnectionToDatebase() {
-
-        // connection to the base
-        try {
-            database = dbHelper.getWritableDatabase();
-        } catch (Exception e) {
-            Log.d("Tag", e.toString());
-        }
-
-        //cursor = null;
-        try {
-            cursor = database.query("contacts", null, null, null, null, null, null);
-        } catch (Exception e) {
-            Log.d("Tag", e.toString());
-        }
-        Log.d("TAG", "count " + String.valueOf(cursor.getCount()));
-        if (cursor.getCount() == 0) {
-
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("name", "Name");
-            contentValues.put("surname", "Surname");
-            contentValues.put("phone", "+38*********");
-            contentValues.put("other", "***");
-            Log.d("TAG", "NEW id = " + database.insert("contacts", null, contentValues));
-        }
-
-        cursor.close();
-        dbHelper.close();
-    }
 
     public ArrayList<Contact> getListFromDatabase() {
 
@@ -75,6 +43,17 @@ public class Database {
         //cursor = database.query("contacts", null, null, null, null, null, null);
 
         //////read
+        if (cursor.getCount() == 0) {
+
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("name", "Name");
+            contentValues.put("surname", "Surname");
+            contentValues.put("phone", "+38*********");
+            contentValues.put("other", "***");
+            Log.d("TAG", "NEW id = " + database.insert("contacts", null, contentValues));
+        }
+
+
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex("id");
             int nameIndex = cursor.getColumnIndex("name");
@@ -82,11 +61,6 @@ public class Database {
             int phoneIndex = cursor.getColumnIndex("phone");
             int otherIndex = cursor.getColumnIndex("other");
             do {
-                Log.d("TAG", "ID = " + cursor.getInt(idIndex) +
-                        ", Name = " + cursor.getString(nameIndex) +
-                        ", Surname = " + cursor.getString(surnameIndex) +
-                        ", Phone = " + cursor.getString(phoneIndex) +
-                        ", Other = " + cursor.getString(otherIndex));
                 list.add(new Contact(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getString(surnameIndex), cursor.getString(phoneIndex), cursor.getString(otherIndex)));
             } while (cursor.moveToNext());
         } else Log.d("TAG", "0 rows");
@@ -99,8 +73,12 @@ public class Database {
     }
 
     private void addContactToDatabase(Contact contact) {
-        //dbHelper = new DBHelper(this);
-        database = dbHelper.getWritableDatabase();
+
+        try {
+            database = dbHelper.getWritableDatabase();
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
 
         // database.delete("contacts", null, null);
         ContentValues contentValues = new ContentValues();
