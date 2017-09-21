@@ -119,14 +119,22 @@ public class Database {
         dbHelper.close();
     }
 
-    public void deleteContactFromDatabase() {
+    public void deleteContactFromDatabase(int id) {
+
         try {
             database = dbHelper.getWritableDatabase();
-            cursor = database.query("contacts", null, null, null, null, null, null);
         } catch (Exception e) {
             Log.d("Tag", e.toString());
         }
 
+        String where = "id = ?";
+        String[] whereArgs = {String.valueOf(id)};
+        try {
+            database.delete("contacts", where, whereArgs);
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
+        dbHelper.close();
 
     }
 

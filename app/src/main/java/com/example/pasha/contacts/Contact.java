@@ -39,9 +39,6 @@ public class Contact implements Comparable<Contact> {
         return contactId;
     }
 
-   /* public void setContactID(int contactId) {
-        this.contactId = contactId;
-    }  //clean*/
 
     public String getOther() {
         return other;

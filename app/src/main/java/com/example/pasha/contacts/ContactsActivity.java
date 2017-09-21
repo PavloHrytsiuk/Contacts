@@ -177,6 +177,9 @@ public class ContactsActivity extends AppCompatActivity {
 //            int position = data.getIntExtra("position", -1);
 
             if (positionID != -1) {
+                Log.d("TAG", "♦♦♦ getContactID - " + contactsList.get(positionID).getContactID());
+                databaseClass.deleteContactFromDatabase(contactsList.get(positionID).getContactID());
+                databaseClass.readDatabaseToLog();
                 contactsList.remove(positionID);
                 sortIdList();
                 if (searchText != null) {
@@ -184,7 +187,8 @@ public class ContactsActivity extends AppCompatActivity {
                 }
                 contactAdapter.notifyDataSetChanged();
                 //reloadSqlDB(contactsList);
-                dbChange = true;
+
+               // dbChange = true;
             }
 
         }
