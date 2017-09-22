@@ -49,8 +49,6 @@ public class ContactsActivity extends AppCompatActivity {
         sortIdList();
 
 
-
-
         contactAdapter = new ContactAdapter(this, R.layout.contact_item, contactsList);
         listView.setAdapter(contactAdapter);
 
@@ -140,7 +138,7 @@ public class ContactsActivity extends AppCompatActivity {
         if (data == null) {
             return;
         }
-       // int position = data.getIntExtra("position", -1); ///change later
+        // int position = data.getIntExtra("position", -1); ///change later
         int positionID = data.getIntExtra("ID", -1);
 
         if (resultCode == SET_CONTACT) {
@@ -157,7 +155,6 @@ public class ContactsActivity extends AppCompatActivity {
             databaseClass.readDatabaseToLog();
 
 
-
         }
         if (resultCode == RESULT_DELETE) {
             if (positionID != -1) {
@@ -171,19 +168,22 @@ public class ContactsActivity extends AppCompatActivity {
                 }
                 contactAdapter.notifyDataSetChanged();
             }
-
         }
         if (resultCode == RESULT_EDIT_CONTACT) {
+
             Log.d("TAG", "(RESULT_EDIT_CONTACT)positionID " + positionID);
-
+            int contactIdForNewContact = contactsList.get(positionID).getContactID();
+            Log.d("TAG", "contactIdForNewContact:" + contactIdForNewContact);
             if (positionID != -1) {
-                Contact newContact = new Contact( data.getStringExtra("newName"), data.getStringExtra("newSurname"), data.getStringExtra("newPhone"), data.getStringExtra("newOther"));
-                Log.d("TAG", "NewContact_Name" + newContact.getName());
-                Log.d("TAG", "NewContact_Surname" + newContact.getSurname());
-                Log.d("TAG", "NewContact_Tel" + newContact.getTel());
-                Log.d("TAG", "NewContact_Other" + newContact.getOther());
-                Log.d("TAG", "NewContact_positionID" + String.valueOf(newContact.getPositionID()));
+                Contact newContact = new Contact(contactIdForNewContact, data.getStringExtra("newName"), data.getStringExtra("newSurname"), data.getStringExtra("newPhone"), data.getStringExtra("newOther"));
+                Log.d("TAG", "NewContact_Name: " + newContact.getName());
+                Log.d("TAG", "NewContact_Surname: " + newContact.getSurname());
+                Log.d("TAG", "NewContact_Tel:" + newContact.getTel());
+                Log.d("TAG", "NewContact_Other:" + newContact.getOther());
+                Log.d("TAG", "NewContact_positionID: " + String.valueOf(newContact.getPositionID()));
 
+                databaseClass.updateContactInDatabase(newContact);
+                databaseClass.readDatabaseToLog();
                 contactsList.set(positionID, newContact);
                 Collections.sort(contactsList);
                 sortIdList();
@@ -191,7 +191,6 @@ public class ContactsActivity extends AppCompatActivity {
                     contactAdapter.filter(searchText);
                 }
                 contactAdapter.notifyDataSetChanged();
-                dbChange = true;
             }
 
         }

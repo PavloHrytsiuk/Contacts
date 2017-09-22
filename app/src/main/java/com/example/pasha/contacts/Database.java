@@ -115,7 +115,6 @@ public class Database {
         } catch (Exception e) {
             Log.d("Tag", e.toString());
         }
-
         String where = "id = ?";
         String[] whereArgs = {String.valueOf(id)};
         try {
@@ -124,7 +123,29 @@ public class Database {
             Log.d("Tag", e.toString());
         }
         dbHelper.close();
+    }
 
+    public void updateContactInDatabase(Contact contact) {
+        try {
+            database = dbHelper.getWritableDatabase();
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
+        String where = "id = ?";
+        String[] whereArgs = {String.valueOf(contact.getContactID())};
+        Log.d("Tag", "ContactID_update: " + String.valueOf(contact.getContactID()));
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", contact.getName());
+        contentValues.put("surname", contact.getSurname());
+        contentValues.put("phone", contact.getTel());
+        contentValues.put("other", contact.getOther());
+        try {
+            database.update("contacts", contentValues, where, whereArgs);
+        } catch (Exception e) {
+            Log.d("Tag", e.toString());
+        }
+        contentValues.clear();
+        dbHelper.close();
     }
 
 }
