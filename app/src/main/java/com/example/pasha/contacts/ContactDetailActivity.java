@@ -18,21 +18,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ContactDetailActivity extends AppCompatActivity {
-    TextView textViewName;
-    TextView textViewTel;
-    TextView textViewOther;
-
-
-    AlertDialog.Builder ad;
-    Context context;
-
-    //int position;
-    int contactID;
+    private TextView textViewName;
+    private TextView textViewTel;
+    private TextView textViewOther;
+    private AlertDialog.Builder ad;
+    private Context context;
+    private String name;
+    private String surname;
+    private int contactID;
     final int RESULT_DELETE = 2;
     final int RESULT_EDIT_CONTACT = 3;
     final int SET_CONTACT = 1;
-    String name;
-    String surname;
 
 
     @Override
@@ -42,19 +38,13 @@ public class ContactDetailActivity extends AppCompatActivity {
         textViewName = (TextView) findViewById(R.id.nameDetailTV);
         textViewTel = (TextView) findViewById(R.id.TelDetailTV);
         textViewOther = (TextView) findViewById(R.id.otherDetailTV);
-
         name = getIntent().getStringExtra("name");
         surname = getIntent().getStringExtra("surname");
         textViewName.setText(surname + " " + name);
-
         textViewTel.setText(getIntent().getStringExtra("tel"));
         textViewOther.setText(getIntent().getStringExtra("other"));
-
-       // position = getIntent().getIntExtra("position", -1);
         contactID = getIntent().getIntExtra("ID", -1);
         Log.d("TAG", "(Detail Activity)contactID " + contactID);
-
-//        setResult(RESULT_CANCELED, null);
 
         textViewTel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,41 +63,28 @@ public class ContactDetailActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //return super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_detail_activity, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_Delete:
-                //Intent intent = new Intent();
-                //intent.putExtra("position", position);
-                // Toast.makeText(ContactDetailActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
-                //setResult(RESULT_DELETE, intent);
-
-//*****
                 context = ContactDetailActivity.this;
                 String title = "Delete this contact";
                 String message = "Are you sure?";
                 String button1String = "NO";
                 String button2String = "YES";
-
                 ad = new AlertDialog.Builder(context);
-                ad.setTitle(title);  // заголовок
-                ad.setMessage(message); // сообщение
+                ad.setTitle(title);
+                ad.setMessage(message);
                 ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int arg1) {
-//                        Toast.makeText(context, "Вы сделали правильный выбор",
-//                                Toast.LENGTH_LONG).show();
                     }
                 });
                 ad.setNegativeButton(button2String, new DialogInterface.OnClickListener() {
@@ -116,25 +93,17 @@ public class ContactDetailActivity extends AppCompatActivity {
                         intent.putExtra("ID", contactID);
                         Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
                         setResult(RESULT_DELETE, intent);
-//                        Toast.makeText(context, "Возможно вы правы", Toast.LENGTH_LONG)
-//                                .show();
                         finish();
                     }
                 });
                 ad.setCancelable(true);
                 ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     public void onCancel(DialogInterface dialog) {
-//                        Toast.makeText(context, "Вы ничего не выбрали",
-//                                Toast.LENGTH_LONG).show();
                     }
                 });
-
                 ad.show();
-
-
-                //*/***
-                //finish();
                 break;
+
             case R.id.action_Edit:
                 Intent intent_two = new Intent(ContactDetailActivity.this, SetContactActivity.class);
                 intent_two.putExtra("name", name);
@@ -144,10 +113,6 @@ public class ContactDetailActivity extends AppCompatActivity {
                 intent_two.putExtra("ID", contactID);
                 startActivityForResult(intent_two, 3);
                 break;
-//            default:
-//                setResult(RESULT_CANCELED, null);
-//                finish();
-//                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -155,7 +120,6 @@ public class ContactDetailActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (data == null) {
             return;
         }
@@ -167,7 +131,6 @@ public class ContactDetailActivity extends AppCompatActivity {
             textViewTel.setText(tel);
             String other = data.getStringExtra("newOther");
             textViewOther.setText(other);
-
             Intent intent = new Intent();
             intent.putExtra("newName", name);
             intent.putExtra("newSurname", surname);
@@ -175,7 +138,6 @@ public class ContactDetailActivity extends AppCompatActivity {
             intent.putExtra("newOther", other);
             intent.putExtra("ID", contactID);
             setResult(RESULT_EDIT_CONTACT, intent);
-
         }
     }
 }
