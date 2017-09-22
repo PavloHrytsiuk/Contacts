@@ -5,20 +5,12 @@ import android.support.annotation.NonNull;
 
 public class Contact implements Comparable<Contact> {
 
-
-
     private int positionID;
     private int contactId;
     private String name;
     private String surname;
     private String tel;
     private String other;
-
-    public Contact(String name, String surname, String tel) {
-        this.name = name;
-        this.tel = tel;
-        this.surname = surname;
-    }
 
     public Contact(String name, String surname, String tel, String other) {
         this.name = name;
@@ -38,7 +30,6 @@ public class Contact implements Comparable<Contact> {
     public int getContactID() {
         return contactId;
     }
-
 
     public String getOther() {
         return other;
@@ -82,7 +73,7 @@ public class Contact implements Comparable<Contact> {
 
     @Override
     public int compareTo(@NonNull Contact o) {
-        if (surname.compareToIgnoreCase(o.surname)==0){
+        if (surname.compareToIgnoreCase(o.surname) == 0) {
             return name.compareToIgnoreCase(o.name);
         }
         return surname.compareToIgnoreCase(o.surname);

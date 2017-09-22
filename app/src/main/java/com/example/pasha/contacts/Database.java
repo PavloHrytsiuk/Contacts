@@ -9,7 +9,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 public class Database {
     private SQLiteDatabase database;
     private Cursor cursor = null;
@@ -19,22 +18,16 @@ public class Database {
         dbHelper = new DBHelper(context);
     }
 
-
     public ArrayList<Contact> getListFromDatabase() {
-
-
         try {
             database = dbHelper.getWritableDatabase();
             cursor = database.query("contacts", null, null, null, null, null, null);
         } catch (Exception e) {
             Log.d("Tag", e.toString());
         }
-
         //read for SQL
         ArrayList<Contact> list;
         list = new ArrayList<>();
-
-
         //////read
         if (cursor.getCount() == 0) {
 
@@ -45,8 +38,6 @@ public class Database {
             contentValues.put("other", "***");
             Log.d("TAG", "NEW id = " + database.insert("contacts", null, contentValues));
         }
-
-
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex("id");
             int nameIndex = cursor.getColumnIndex("name");
@@ -65,13 +56,11 @@ public class Database {
     }
 
     public void addContactToDatabase(Contact contact) {
-
         try {
             database = dbHelper.getWritableDatabase();
         } catch (Exception e) {
             Log.d("Tag", e.toString());
         }
-
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", contact.getName());
         contentValues.put("surname", contact.getSurname());
@@ -89,7 +78,6 @@ public class Database {
         } catch (Exception e) {
             Log.d("Tag", e.toString());
         }
-
         if (cursor.moveToFirst()) {
             int idIndex = cursor.getColumnIndex("id");
             int nameIndex = cursor.getColumnIndex("name");
@@ -109,7 +97,6 @@ public class Database {
     }
 
     public void deleteContactFromDatabase(int id) {
-
         try {
             database = dbHelper.getWritableDatabase();
         } catch (Exception e) {
