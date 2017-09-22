@@ -24,7 +24,6 @@ public class ContactsActivity extends AppCompatActivity {
 
     ListView listView;
     ArrayList<Contact> contactsList;
-    // ArrayList<Contact> contactsListChange;
 
 
     ContactAdapter contactAdapter;
@@ -45,22 +44,11 @@ public class ContactsActivity extends AppCompatActivity {
         setContentView(R.layout.contacts_main);
 
         listView = (ListView) findViewById(R.id.listView);
-        //contactsList = new ArrayList<>();
         contactsList = databaseClass.getListFromDatabase();
         databaseClass.readDatabaseToLog();
         sortIdList();
 
 
-//        contactsList.add(new Contact("Palvo", "Hrytsiuk", "+380953275624"));
-//        contactsList.add(new Contact("Oleksandr", "Hrytsiuk", "+380953085331"));
-//        contactsList.add(new Contact("Anna", "Hrytsiuk", "+380505542403"));
-//        contactsList.add(new Contact("Zhanna", "Hrytsiuk", "+80952580785", "Mather"));
-//        contactsList.add(new Contact("Maria", "Kononyuk", "+380662444516"));
-//        contactsList.add(new Contact("Pasha", "Zan", "380666083972"));
-//        contactsList.add(new Contact("Vadim", "Rubik", "380953085451"));
-//        contactsList.add(new Contact("Jaroslav", "Medyantsev", "380953085231"));
-//        contactsList.add(new Contact("Sergiy", "Pavlyuk", "380673020331"));
-//        contactsList.add(new Contact("Andriy", "Gavruluyk", "380673250331"));
 
 
         contactAdapter = new ContactAdapter(this, R.layout.contact_item, contactsList);
@@ -152,7 +140,7 @@ public class ContactsActivity extends AppCompatActivity {
         if (data == null) {
             return;
         }
-        int position = data.getIntExtra("position", -1); ///change later
+       // int position = data.getIntExtra("position", -1); ///change later
         int positionID = data.getIntExtra("ID", -1);
 
         if (resultCode == SET_CONTACT) {
@@ -165,17 +153,13 @@ public class ContactsActivity extends AppCompatActivity {
                 contactAdapter.filter(searchText);
             }
             contactAdapter.notifyDataSetChanged();
-            ///*******
-            //reloadSqlDB(contactsList);
             databaseClass.addContactToDatabase(newContact);
             databaseClass.readDatabaseToLog();
-            //dbChange = true;
+
 
 
         }
         if (resultCode == RESULT_DELETE) {
-//            int position = data.getIntExtra("position", -1);
-
             if (positionID != -1) {
                 Log.d("TAG", "♦♦♦ getContactID - " + contactsList.get(positionID).getContactID());
                 databaseClass.deleteContactFromDatabase(contactsList.get(positionID).getContactID());
@@ -186,14 +170,10 @@ public class ContactsActivity extends AppCompatActivity {
                     contactAdapter.filter(searchText);
                 }
                 contactAdapter.notifyDataSetChanged();
-                //reloadSqlDB(contactsList);
-
-               // dbChange = true;
             }
 
         }
         if (resultCode == RESULT_EDIT_CONTACT) {
-//            int position = data.getIntExtra("position", -1); ///change later
             Log.d("TAG", "(RESULT_EDIT_CONTACT)positionID " + positionID);
 
             if (positionID != -1) {
@@ -204,7 +184,6 @@ public class ContactsActivity extends AppCompatActivity {
                 Log.d("TAG", "NewContact_Other" + newContact.getOther());
                 Log.d("TAG", "NewContact_positionID" + String.valueOf(newContact.getPositionID()));
 
-
                 contactsList.set(positionID, newContact);
                 Collections.sort(contactsList);
                 sortIdList();
@@ -212,7 +191,6 @@ public class ContactsActivity extends AppCompatActivity {
                     contactAdapter.filter(searchText);
                 }
                 contactAdapter.notifyDataSetChanged();
-                //reloadSqlDB(contactsList);
                 dbChange = true;
             }
 

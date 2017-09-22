@@ -32,11 +32,8 @@ public class Database {
 
         //read for SQL
         ArrayList<Contact> list;
-        //listView = (ListView) findViewById(R.id.listView);
         list = new ArrayList<>();
 
-        //contactsListChange = contactsList;  ///&^&&
-        //cursor = database.query("contacts", null, null, null, null, null, null);
 
         //////read
         if (cursor.getCount() == 0) {
@@ -64,7 +61,6 @@ public class Database {
         //***set id how position!!!
         cursor.close();
         dbHelper.close();
-        //sortIdList();
         return list;
     }
 
@@ -76,19 +72,13 @@ public class Database {
             Log.d("Tag", e.toString());
         }
 
-        // database.delete("contacts", null, null);
         ContentValues contentValues = new ContentValues();
-       /* if (contact.getContactId() != 0) {
-            contentValues.put("id", contact.getContactId());
-        }*/
         contentValues.put("name", contact.getName());
         contentValues.put("surname", contact.getSurname());
         contentValues.put("phone", contact.getTel());
         contentValues.put("other", contact.getOther());
         Log.d("TAG", "NEW contact = " + database.insert("contacts", null, contentValues));
-
         contentValues.clear();
-
         dbHelper.close();
     }
 
@@ -112,7 +102,6 @@ public class Database {
                         ", Surname = " + cursor.getString(surnameIndex) +
                         ", Phone = " + cursor.getString(phoneIndex) +
                         ", Other = " + cursor.getString(otherIndex));
-                // list.add(new Contact(cursor.getInt(idIndex), cursor.getString(nameIndex), cursor.getString(surnameIndex), cursor.getString(phoneIndex), cursor.getString(otherIndex)));
             } while (cursor.moveToNext());
         } else Log.d("TAG", "0 rows");
         cursor.close();
