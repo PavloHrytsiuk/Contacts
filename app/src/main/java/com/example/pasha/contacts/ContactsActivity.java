@@ -44,12 +44,12 @@ public class ContactsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ContactsActivity.this, ContactDetailActivity.class);
-                intent.putExtra("name", contactAdapter.listContacts.get(position).getName());
-                intent.putExtra("surname", contactAdapter.listContacts.get(position).getSurname());
-                intent.putExtra("tel", contactAdapter.listContacts.get(position).getTel());
-                intent.putExtra("other", contactAdapter.listContacts.get(position).getOther());
+                intent.putExtra("name", contactAdapter.getListContacts().get(position).getName());
+                intent.putExtra("surname", contactAdapter.getListContacts().get(position).getSurname());
+                intent.putExtra("tel", contactAdapter.getListContacts().get(position).getTel());
+                intent.putExtra("other", contactAdapter.getListContacts().get(position).getOther());
                 intent.putExtra("size", contacts.size());
-                intent.putExtra("ID", contactAdapter.listContacts.get(position).getPositionID());
+                intent.putExtra("ID", contactAdapter.getListContacts().get(position).getPositionID());
                 startActivityForResult(intent, 1);
             }
         });
@@ -70,7 +70,7 @@ public class ContactsActivity extends AppCompatActivity {
                 contactAdapter.filter(searchText);
                 contactAdapter.notifyDataSetChanged();
                 Log.d("TAG", "******");
-                for (Contact x : contactAdapter.listContacts) {
+                for (Contact x : contactAdapter.getListContacts()) {
                     Log.d("TAG", "Adapter after " + x.getSurname());
                 }
                 Log.d("TAG", "***contacts***");

@@ -14,7 +14,9 @@ import java.util.Locale;
 
 
 public class ContactAdapter extends ArrayAdapter<Contact> {
-    List<Contact> listContacts;
+
+
+    private List<Contact> listContacts;
     private List<Contact> listContactsCleanCopy;
     private Context context;
 
@@ -56,5 +58,8 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
     @Override
     public int getCount() {
         return listContacts.size();
+    }
+    public List<Contact> getListContacts() {
+        return listContacts;
     }
 }
