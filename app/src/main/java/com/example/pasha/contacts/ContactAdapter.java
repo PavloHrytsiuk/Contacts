@@ -59,6 +59,7 @@ public class ContactAdapter extends ArrayAdapter<Contact> {
     public int getCount() {
         return listContacts.size();
     }
+
     public List<Contact> getListContacts() {
         return listContacts;
     }

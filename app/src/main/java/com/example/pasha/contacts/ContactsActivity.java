@@ -10,25 +10,25 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
-public class ContactsActivity extends AppCompatActivity {
+public class ContactsActivity extends AppCompatActivity implements ContactsCallbacks {
 
     private RecyclerView recyclerView;
     private ArrayList<Contact> contacts;
-    private ContactAdapter contactAdapter;
+    //private ContactAdapter contactAdapter;
     private EditText searchEdText;
     private String searchText;
     private Database databaseClass = new Database(this);
     final int SET_CONTACT = 1;
     final int RESULT_DELETE = 2;
     final int RESULT_EDIT_CONTACT = 3;
+    RVAdapter rvAdapter;
 
 
     @Override
@@ -47,7 +47,7 @@ public class ContactsActivity extends AppCompatActivity {
         sortIdList();
         //contactAdapter = new ContactAdapter(this, R.layout.contact_item, contacts);
        // recyclerView.setAdapter(contactAdapter);
-        RVAdapter rvAdapter = new RVAdapter(this, contacts);
+        rvAdapter = new RVAdapter(contacts, this);
         recyclerView.setAdapter(rvAdapter);
 
 
@@ -57,12 +57,12 @@ public class ContactsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ContactsActivity.this, ContactDetailActivity.class);
-                intent.putExtra("name", contactAdapter.getListContacts().get(position).getName());
-                intent.putExtra("surname", contactAdapter.getListContacts().get(position).getSurname());
-                intent.putExtra("tel", contactAdapter.getListContacts().get(position).getTel());
-                intent.putExtra("other", contactAdapter.getListContacts().get(position).getOther());
+                intent.putExtra("name", contactAdapter.getContacts().get(position).getName());
+                intent.putExtra("surname", contactAdapter.getContacts().get(position).getSurname());
+                intent.putExtra("tel", contactAdapter.getContacts().get(position).getTel());
+                intent.putExtra("other", contactAdapter.getContacts().get(position).getOther());
                 intent.putExtra("size", contacts.size());
-                intent.putExtra("ID", contactAdapter.getListContacts().get(position).getPositionID());
+                intent.putExtra("ID", contactAdapter.getContacts().get(position).getPositionID());
                 startActivityForResult(intent, 1);
             }
         });*/
@@ -80,10 +80,10 @@ public class ContactsActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 searchText = searchEdText.getText().toString().toLowerCase(Locale.getDefault());
-                contactAdapter.filter(searchText);
-                contactAdapter.notifyDataSetChanged();
+                rvAdapter.filter(searchText);
+                rvAdapter.notifyDataSetChanged();
                 Log.d("TAG", "******");
-                for (Contact x : contactAdapter.getListContacts()) {
+                for (Contact x : rvAdapter.getContacts()) {
                     Log.d("TAG", "Adapter after " + x.getSurname());
                 }
                 Log.d("TAG", "***contacts***");
@@ -124,9 +124,9 @@ public class ContactsActivity extends AppCompatActivity {
             Collections.sort(contacts);
             sortIdList();
             if (searchText != null) {
-                contactAdapter.filter(searchText);
+                rvAdapter.filter(searchText);
             }
-            contactAdapter.notifyDataSetChanged();
+            rvAdapter.notifyDataSetChanged();
             databaseClass.addContactToDatabase(newContact);
             databaseClass.readDatabaseToLog();
         }
@@ -138,9 +138,9 @@ public class ContactsActivity extends AppCompatActivity {
                 contacts.remove(positionID);
                 sortIdList();
                 if (searchText != null) {
-                    contactAdapter.filter(searchText);
+                    rvAdapter.filter(searchText);
                 }
-                contactAdapter.notifyDataSetChanged();
+                rvAdapter.notifyDataSetChanged();
             }
         }
         if (resultCode == RESULT_EDIT_CONTACT) {
@@ -160,9 +160,9 @@ public class ContactsActivity extends AppCompatActivity {
                 Collections.sort(contacts);
                 sortIdList();
                 if (searchText != null) {
-                    contactAdapter.filter(searchText);
+                    rvAdapter.filter(searchText);
                 }
-                contactAdapter.notifyDataSetChanged();
+                rvAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -174,5 +174,18 @@ public class ContactsActivity extends AppCompatActivity {
         for (int i = 0; i < contacts.size(); i++) {
             Log.d("TAG", "new PositionID =" + contacts.get(i).getPositionID() + " " + contacts.get(i).getSurname() + " " + contacts.get(i).getName());
         }
+    }
+
+    @Override
+    public void onClick(int position) {
+        List<Contact> listContacts = rvAdapter.getContacts();
+        Intent intent = new Intent(ContactsActivity.this, ContactDetailActivity.class);
+        intent.putExtra("name", listContacts.get(position).getName());
+        intent.putExtra("surname", listContacts.get(position).getSurname());
+        intent.putExtra("tel", listContacts.get(position).getTel());
+        intent.putExtra("other", listContacts.get(position).getOther());
+        intent.putExtra("size", contacts.size());
+        intent.putExtra("ID", listContacts.get(position).getPositionID());
+        startActivityForResult(intent, 1);
     }
 }
