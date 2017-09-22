@@ -3,6 +3,8 @@ package com.example.pasha.contacts;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -11,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,7 +20,7 @@ import java.util.Locale;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    private ListView listView;
+    private RecyclerView recyclerView;
     private ArrayList<Contact> contacts;
     private ContactAdapter contactAdapter;
     private EditText searchEdText;
@@ -29,18 +30,30 @@ public class ContactsActivity extends AppCompatActivity {
     final int RESULT_DELETE = 2;
     final int RESULT_EDIT_CONTACT = 3;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contacts_main);
-        listView = (ListView) findViewById(R.id.listView);
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycleView);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(llm);
+
         contacts = databaseClass.getListFromDatabase();
         databaseClass.readDatabaseToLog();
         sortIdList();
-        contactAdapter = new ContactAdapter(this, R.layout.contact_item, contacts);
-        listView.setAdapter(contactAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //contactAdapter = new ContactAdapter(this, R.layout.contact_item, contacts);
+       // recyclerView.setAdapter(contactAdapter);
+        RVAdapter rvAdapter = new RVAdapter(this, contacts);
+        recyclerView.setAdapter(rvAdapter);
+
+
+
+
+        /*recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(ContactsActivity.this, ContactDetailActivity.class);
@@ -52,7 +65,7 @@ public class ContactsActivity extends AppCompatActivity {
                 intent.putExtra("ID", contactAdapter.getListContacts().get(position).getPositionID());
                 startActivityForResult(intent, 1);
             }
-        });
+        });*/
         searchEdText = (EditText) findViewById(R.id.editSearch);
         searchEdText.addTextChangedListener(new TextWatcher() {
 

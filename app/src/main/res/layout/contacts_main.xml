@@ -16,11 +16,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/editSearch"
         android:textSize="20sp"/>
-    <ListView
-        android:id="@+id/listView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
