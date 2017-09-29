@@ -1,4 +1,4 @@
-package com.example.pasha.contacts;
+package com.example.pasha.contacts.contacts;
 
 public interface ContactsCallbacks {
 

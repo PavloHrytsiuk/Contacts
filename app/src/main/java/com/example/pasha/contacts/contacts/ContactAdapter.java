@@ -1,4 +1,4 @@
-package com.example.pasha.contacts;
+package com.example.pasha.contacts.contacts;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.pasha.contacts.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -14,13 +16,13 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.PersonViewHolder> {
 
     private List<Contact> contacts;
     private List<Contact> listContactsCleanCopy;
     private ContactsCallbacks callbacks;
 
-    public RVAdapter(List<Contact> contacts, ContactsCallbacks callbacks) {
+    public ContactAdapter(List<Contact> contacts, ContactsCallbacks callbacks) {
         this.contacts = contacts;
         this.listContactsCleanCopy = contacts;
         this.callbacks = callbacks;
@@ -29,8 +31,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
     @Override
     public PersonViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_item, parent, false);
-        PersonViewHolder pvh = new PersonViewHolder(v, callbacks);
-        return pvh;
+        return new PersonViewHolder(v, callbacks);
     }
 
     @Override
@@ -74,7 +75,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
         PersonViewHolder(View itemView, final ContactsCallbacks callbacks) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(new View.OnClickListener() {
+            cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     callbacks.onClick(getAdapterPosition());

@@ -1,4 +1,4 @@
-package com.example.pasha.contacts;
+package com.example.pasha.contacts.database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,15 +6,17 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.example.pasha.contacts.contacts.Contact;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 public class Database {
     private SQLiteDatabase database;
     private Cursor cursor = null;
-    private DBHelper dbHelper; //= new DBHelper(context);
+    private DBHelper dbHelper;
 
-    Database(Context context) {
+    public Database(Context context) {
         dbHelper = new DBHelper(context);
     }
 
@@ -25,12 +27,9 @@ public class Database {
         } catch (Exception e) {
             Log.d("Tag", e.toString());
         }
-        //read for SQL
         ArrayList<Contact> list;
         list = new ArrayList<>();
-        //////read
         if (cursor.getCount() == 0) {
-
             ContentValues contentValues = new ContentValues();
             contentValues.put("name", "Name");
             contentValues.put("surname", "Surname");
@@ -49,7 +48,6 @@ public class Database {
             } while (cursor.moveToNext());
         } else Log.d("TAG", "0 rows");
         Collections.sort(list);
-        //***set id how position!!!
         cursor.close();
         dbHelper.close();
         return list;

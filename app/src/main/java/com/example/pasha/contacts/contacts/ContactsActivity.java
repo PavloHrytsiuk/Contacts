@@ -1,4 +1,4 @@
-package com.example.pasha.contacts;
+package com.example.pasha.contacts.contacts;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -12,23 +12,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.example.pasha.contacts.database.Database;
+import com.example.pasha.contacts.R;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ContactsActivity extends AppCompatActivity implements ContactsCallbacks {
 
-    private RecyclerView recyclerView;
+    @BindView(R.id.recycleView) RecyclerView recyclerView;
+    @BindView(R.id.editSearch) EditText searchEdText;
+
+    static final int RESULT_SET_CONTACT = 1;
+    static final int RESULT_DELETE_CONTACT = 2;
+    static final int RESULT_EDIT_CONTACT = 3;
+
     private ArrayList<Contact> contacts;
-    //private ContactAdapter contactAdapter;
-    private EditText searchEdText;
     private String searchText;
     private Database databaseClass = new Database(this);
-    final int SET_CONTACT = 1;
-    final int RESULT_DELETE = 2;
-    final int RESULT_EDIT_CONTACT = 3;
-    RVAdapter rvAdapter;
+    private ContactAdapter contactAdapter;
 
 
     @Override
@@ -36,37 +43,16 @@ public class ContactsActivity extends AppCompatActivity implements ContactsCallb
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contacts_main);
-
-        recyclerView = (RecyclerView) findViewById(R.id.recycleView);
+        ButterKnife.bind(this);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(llm);
-
         contacts = databaseClass.getListFromDatabase();
         databaseClass.readDatabaseToLog();
         sortIdList();
-        //contactAdapter = new ContactAdapter(this, R.layout.contact_item, contacts);
-       // recyclerView.setAdapter(contactAdapter);
-        rvAdapter = new RVAdapter(contacts, this);
-        recyclerView.setAdapter(rvAdapter);
+        contactAdapter = new ContactAdapter(contacts, this);
+        recyclerView.setAdapter(contactAdapter);
 
-
-
-
-        /*recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ContactsActivity.this, ContactDetailActivity.class);
-                intent.putExtra("name", contactAdapter.getContacts().get(position).getName());
-                intent.putExtra("surname", contactAdapter.getContacts().get(position).getSurname());
-                intent.putExtra("tel", contactAdapter.getContacts().get(position).getTel());
-                intent.putExtra("other", contactAdapter.getContacts().get(position).getOther());
-                intent.putExtra("size", contacts.size());
-                intent.putExtra("ID", contactAdapter.getContacts().get(position).getPositionID());
-                startActivityForResult(intent, 1);
-            }
-        });*/
-        searchEdText = (EditText) findViewById(R.id.editSearch);
         searchEdText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -80,10 +66,10 @@ public class ContactsActivity extends AppCompatActivity implements ContactsCallb
             @Override
             public void afterTextChanged(Editable s) {
                 searchText = searchEdText.getText().toString().toLowerCase(Locale.getDefault());
-                rvAdapter.filter(searchText);
-                rvAdapter.notifyDataSetChanged();
+                contactAdapter.filter(searchText);
+                contactAdapter.notifyDataSetChanged();
                 Log.d("TAG", "******");
-                for (Contact x : rvAdapter.getContacts()) {
+                for (Contact x : contactAdapter.getContacts()) {
                     Log.d("TAG", "Adapter after " + x.getSurname());
                 }
                 Log.d("TAG", "***contacts***");
@@ -118,19 +104,19 @@ public class ContactsActivity extends AppCompatActivity implements ContactsCallb
             return;
         }
         int positionID = data.getIntExtra("ID", -1);
-        if (resultCode == SET_CONTACT) {
+        if (resultCode == RESULT_SET_CONTACT) {
             Contact newContact = new Contact(data.getStringExtra("newName"), data.getStringExtra("newSurname"), data.getStringExtra("newPhone"), data.getStringExtra("newOther"));
             contacts.add(newContact);
             Collections.sort(contacts);
             sortIdList();
             if (searchText != null) {
-                rvAdapter.filter(searchText);
+                contactAdapter.filter(searchText);
             }
-            rvAdapter.notifyDataSetChanged();
+            contactAdapter.notifyDataSetChanged();
             databaseClass.addContactToDatabase(newContact);
             databaseClass.readDatabaseToLog();
         }
-        if (resultCode == RESULT_DELETE) {
+        if (resultCode == RESULT_DELETE_CONTACT) {
             if (positionID != -1) {
                 Log.d("TAG", "♦♦♦ getContactID - " + contacts.get(positionID).getContactID());
                 databaseClass.deleteContactFromDatabase(contacts.get(positionID).getContactID());
@@ -138,9 +124,9 @@ public class ContactsActivity extends AppCompatActivity implements ContactsCallb
                 contacts.remove(positionID);
                 sortIdList();
                 if (searchText != null) {
-                    rvAdapter.filter(searchText);
+                    contactAdapter.filter(searchText);
                 }
-                rvAdapter.notifyDataSetChanged();
+                contactAdapter.notifyDataSetChanged();
             }
         }
         if (resultCode == RESULT_EDIT_CONTACT) {
@@ -160,9 +146,9 @@ public class ContactsActivity extends AppCompatActivity implements ContactsCallb
                 Collections.sort(contacts);
                 sortIdList();
                 if (searchText != null) {
-                    rvAdapter.filter(searchText);
+                    contactAdapter.filter(searchText);
                 }
-                rvAdapter.notifyDataSetChanged();
+                contactAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -178,7 +164,7 @@ public class ContactsActivity extends AppCompatActivity implements ContactsCallb
 
     @Override
     public void onClick(int position) {
-        List<Contact> listContacts = rvAdapter.getContacts();
+        List<Contact> listContacts = contactAdapter.getContacts();
         Intent intent = new Intent(ContactsActivity.this, ContactDetailActivity.class);
         intent.putExtra("name", listContacts.get(position).getName());
         intent.putExtra("surname", listContacts.get(position).getSurname());
