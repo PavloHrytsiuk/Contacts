@@ -1,59 +1,58 @@
-package com.example.pasha.contacts;
+package com.example.pasha.contacts.contacts;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
+
+import com.example.pasha.contacts.database.Database;
+import com.example.pasha.contacts.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
-public class ContactsActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-    private ListView listView;
+public class ContactsActivity extends AppCompatActivity implements ContactsCallbacks {
+
+    @BindView(R.id.recycleView) RecyclerView recyclerView;
+    @BindView(R.id.editSearch) EditText searchEdText;
+
+    static final int RESULT_SET_CONTACT = 1;
+    static final int RESULT_DELETE_CONTACT = 2;
+    static final int RESULT_EDIT_CONTACT = 3;
+
     private ArrayList<Contact> contacts;
-    private ContactAdapter contactAdapter;
-    private EditText searchEdText;
     private String searchText;
     private Database databaseClass = new Database(this);
-    final int SET_CONTACT = 1;
-    final int RESULT_DELETE = 2;
-    final int RESULT_EDIT_CONTACT = 3;
+    private ContactAdapter contactAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.contacts_main);
-        listView = (ListView) findViewById(R.id.listView);
+        ButterKnife.bind(this);
+
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(llm);
         contacts = databaseClass.getListFromDatabase();
         databaseClass.readDatabaseToLog();
         sortIdList();
-        contactAdapter = new ContactAdapter(this, R.layout.contact_item, contacts);
-        listView.setAdapter(contactAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ContactsActivity.this, ContactDetailActivity.class);
-                intent.putExtra("name", contactAdapter.getListContacts().get(position).getName());
-                intent.putExtra("surname", contactAdapter.getListContacts().get(position).getSurname());
-                intent.putExtra("tel", contactAdapter.getListContacts().get(position).getTel());
-                intent.putExtra("other", contactAdapter.getListContacts().get(position).getOther());
-                intent.putExtra("size", contacts.size());
-                intent.putExtra("ID", contactAdapter.getListContacts().get(position).getPositionID());
-                startActivityForResult(intent, 1);
-            }
-        });
-        searchEdText = (EditText) findViewById(R.id.editSearch);
+        contactAdapter = new ContactAdapter(contacts, this);
+        recyclerView.setAdapter(contactAdapter);
+
         searchEdText.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -70,7 +69,7 @@ public class ContactsActivity extends AppCompatActivity {
                 contactAdapter.filter(searchText);
                 contactAdapter.notifyDataSetChanged();
                 Log.d("TAG", "******");
-                for (Contact x : contactAdapter.getListContacts()) {
+                for (Contact x : contactAdapter.getContacts()) {
                     Log.d("TAG", "Adapter after " + x.getSurname());
                 }
                 Log.d("TAG", "***contacts***");
@@ -105,7 +104,7 @@ public class ContactsActivity extends AppCompatActivity {
             return;
         }
         int positionID = data.getIntExtra("ID", -1);
-        if (resultCode == SET_CONTACT) {
+        if (resultCode == RESULT_SET_CONTACT) {
             Contact newContact = new Contact(data.getStringExtra("newName"), data.getStringExtra("newSurname"), data.getStringExtra("newPhone"), data.getStringExtra("newOther"));
             contacts.add(newContact);
             Collections.sort(contacts);
@@ -117,7 +116,7 @@ public class ContactsActivity extends AppCompatActivity {
             databaseClass.addContactToDatabase(newContact);
             databaseClass.readDatabaseToLog();
         }
-        if (resultCode == RESULT_DELETE) {
+        if (resultCode == RESULT_DELETE_CONTACT) {
             if (positionID != -1) {
                 Log.d("TAG", "♦♦♦ getContactID - " + contacts.get(positionID).getContactID());
                 databaseClass.deleteContactFromDatabase(contacts.get(positionID).getContactID());
@@ -161,5 +160,18 @@ public class ContactsActivity extends AppCompatActivity {
         for (int i = 0; i < contacts.size(); i++) {
             Log.d("TAG", "new PositionID =" + contacts.get(i).getPositionID() + " " + contacts.get(i).getSurname() + " " + contacts.get(i).getName());
         }
+    }
+
+    @Override
+    public void onClick(int position) {
+        List<Contact> listContacts = contactAdapter.getContacts();
+        Intent intent = new Intent(ContactsActivity.this, ContactDetailActivity.class);
+        intent.putExtra("name", listContacts.get(position).getName());
+        intent.putExtra("surname", listContacts.get(position).getSurname());
+        intent.putExtra("tel", listContacts.get(position).getTel());
+        intent.putExtra("other", listContacts.get(position).getOther());
+        intent.putExtra("size", contacts.size());
+        intent.putExtra("ID", listContacts.get(position).getPositionID());
+        startActivityForResult(intent, 1);
     }
 }

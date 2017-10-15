@@ -1,4 +1,4 @@
-package com.example.pasha.contacts;
+package com.example.pasha.contacts.contacts;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -8,23 +8,26 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.pasha.contacts.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class SetContactActivity extends AppCompatActivity {
 
-    private EditText etName;
-    private EditText etSurname;
-    private EditText etPhone;
-    private EditText etOther;
+    @BindView(R.id.setNameSetActivity) EditText etName;
+    @BindView(R.id.setSurnameSetActivity) EditText etSurname;
+    @BindView(R.id.setPhoneSetActivity) EditText etPhone;
+    @BindView(R.id.setOtherSetActivity) EditText etOther;
+
     private int contactID;
-    final int SET_CONTACT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_contact);
-        etName = (EditText) findViewById(R.id.setName_setActivity);
-        etSurname = (EditText) findViewById(R.id.setSurname_setActivity);
-        etPhone = (EditText) findViewById(R.id.setPhone_setActivity);
-        etOther = (EditText) findViewById(R.id.setOther_setActivity);
+        ButterKnife.bind(this);
+
         etName.setText(getIntent().getStringExtra("name"), null);
         etSurname.setText(getIntent().getStringExtra("surname"), null);
         etPhone.setText(getIntent().getStringExtra("tel"), null);
@@ -57,7 +60,7 @@ public class SetContactActivity extends AppCompatActivity {
                 intent.putExtra("newOther", etOther.getText().toString());
                 intent.putExtra("ID", contactID);
                 Toast.makeText(SetContactActivity.this, "Save", Toast.LENGTH_SHORT).show();
-                setResult(SET_CONTACT, intent);
+                setResult(ContactsActivity.RESULT_SET_CONTACT, intent);
                 finish();
                 break;
             default:
@@ -67,5 +70,4 @@ public class SetContactActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
 }

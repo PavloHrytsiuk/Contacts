@@ -6,50 +6,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context="com.example.pasha.contacts.ContactDetailActivity">
+    tools:context="com.example.pasha.contacts.contacts.ContactDetailActivity">
 
     <TextView
         android:id="@+id/nameDetailTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:padding="10dp"
-        android:paddingStart="10dp"
-        android:text="xxxxxxx"
+        android:layout_margin="@dimen/default_medium_margin"
         android:textColor="#000000"
-        android:textSize="35sp" />
+        android:textSize="@dimen/text_large" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:text="Mobile phone:"
-        android:textSize="16sp"
+        android:layout_marginStart="@dimen/default_medium_margin"
+        android:text="@string/mobile_phone"
+        android:textSize="@dimen/small_text_size"
         android:textStyle="italic" />
 
     <TextView
         android:id="@+id/TelDetailTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="15dp"
-        android:text="0000000000"
+        android:layout_margin="@dimen/default_medium_margin"
         android:textColor="#000000"
-        android:textSize="25dp" />
+        android:textSize="@dimen/text_large" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:text="Other:"
-        android:textSize="16sp"
+        android:layout_marginStart="@dimen/default_medium_margin"
+        android:text="@string/other"
+        android:textSize="@dimen/small_text_size"
         android:textStyle="italic" />
 
     <TextView
         android:id="@+id/otherDetailTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:textSize="20sp"
+        android:layout_marginStart="@dimen/default_medium_margin"
+        android:textSize="@dimen/default_text_normal"
         android:textColor="#000000"/>
 
 </LinearLayout>

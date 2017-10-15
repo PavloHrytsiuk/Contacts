@@ -1,4 +1,4 @@
-package com.example.pasha.contacts;
+package com.example.pasha.contacts.contacts;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -17,27 +17,28 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.pasha.contacts.R;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ContactDetailActivity extends AppCompatActivity {
-    private TextView textViewName;
-    private TextView textViewTel;
-    private TextView textViewOther;
+    @BindView(R.id.nameDetailTV) TextView textViewName;
+    @BindView(R.id.TelDetailTV) TextView textViewTel;
+    @BindView(R.id.otherDetailTV) TextView textViewOther;
+
     private AlertDialog.Builder ad;
-    private Context context;
     private String name;
     private String surname;
     private int contactID;
-    final int RESULT_DELETE = 2;
-    final int RESULT_EDIT_CONTACT = 3;
-    final int SET_CONTACT = 1;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_detail);
-        textViewName = (TextView) findViewById(R.id.nameDetailTV);
-        textViewTel = (TextView) findViewById(R.id.TelDetailTV);
-        textViewOther = (TextView) findViewById(R.id.otherDetailTV);
+        ButterKnife.bind(this);
+
         name = getIntent().getStringExtra("name");
         surname = getIntent().getStringExtra("surname");
         textViewName.setText(surname + " " + name);
@@ -75,12 +76,11 @@ public class ContactDetailActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_Delete:
-                context = ContactDetailActivity.this;
                 String title = "Delete this contact";
                 String message = "Are you sure?";
                 String button1String = "NO";
                 String button2String = "YES";
-                ad = new AlertDialog.Builder(context);
+                ad = new AlertDialog.Builder(ContactDetailActivity.this);
                 ad.setTitle(title);
                 ad.setMessage(message);
                 ad.setPositiveButton(button1String, new DialogInterface.OnClickListener() {
@@ -91,8 +91,8 @@ public class ContactDetailActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int arg1) {
                         Intent intent = new Intent();
                         intent.putExtra("ID", contactID);
-                        Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
-                        setResult(RESULT_DELETE, intent);
+                        Toast.makeText(ContactDetailActivity.this, "Deleted", Toast.LENGTH_SHORT).show();
+                        setResult(ContactsActivity.RESULT_DELETE_CONTACT, intent);
                         finish();
                     }
                 });
@@ -123,7 +123,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         if (data == null) {
             return;
         }
-        if (resultCode == SET_CONTACT) {
+        if (resultCode == ContactsActivity.RESULT_SET_CONTACT) {
             name = data.getStringExtra("newName");
             surname = data.getStringExtra("newSurname");
             textViewName.setText(surname + " " + name);
@@ -137,7 +137,7 @@ public class ContactDetailActivity extends AppCompatActivity {
             intent.putExtra("newPhone", tel);
             intent.putExtra("newOther", other);
             intent.putExtra("ID", contactID);
-            setResult(RESULT_EDIT_CONTACT, intent);
+            setResult(ContactsActivity.RESULT_EDIT_CONTACT, intent);
         }
     }
 }

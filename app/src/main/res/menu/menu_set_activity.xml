@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.pasha.contacts.SetContactActivity">
+    tools:context="com.example.pasha.contacts.contacts.SetContactActivity">
     <item
         android:icon="@drawable/ok_50"
         android:id="@+id/action_OK"
         android:orderInCategory="1"
-        android:title="OK"
+        android:title="@string/ok"
         app:showAsAction="ifRoom" />
 
 </menu>

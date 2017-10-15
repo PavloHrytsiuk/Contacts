@@ -5,22 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.pasha.contacts.ContactsActivity">
+   android:padding="@dimen/default_margin"
+    tools:context="com.example.pasha.contacts.contacts.ContactsActivity">
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/editSearch"
-        android:textSize="20sp"/>
-    <ListView
-        android:id="@+id/listView"
+        android:textSize="@dimen/default_text_normal"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    </ListView>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>
